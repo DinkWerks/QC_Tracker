@@ -1,24 +1,129 @@
-<GISQC>
-    id: GISQC
-    size_hint_y: .3
-    BoxLayout:
-        Label:
-            text: 'Name'
-            pos_hint: {'x':.1, 'y':.6}
-            size_hint: .2,.05
-        Label:
-            text: 'Date'
-            pos_hint: {'x':.1, 'y':.3}
-            size_hint: .2,.05
-
 <DBQC>
     size_hint_y: .3
-    BoxLayout:
+    orientation: 'vertical'
+    FloatLayout:
+        size_hint: 1, .3
+        Button:
+            text: 'Complete'
+            size_hint: .166, .8
+            pos_hint: {'x':.01, 'y':0}
+            on_release: root.complete()
+        Button:
+            text: 'Missing'
+            size_hint: .166, .8
+            pos_hint: {'x':.648, 'y':0}
+        Button:
+            text: 'Voided'
+            size_hint: .166, .8
+            pos_hint: {'x':.824, 'y':0}
+    FloatLayout:
         Label:
-            text: 'Who'
-            pos_hint: {'x':.1, 'y':.6}
-            size_hint: .2,.05
+            text: root.user
+            size_hint: .166,.05
+            pos_hint: {'x':.01, 'y':.66}
         Label:
-            text: 'Dat'
-            pos_hint: {'x':.1, 'y':.3}
-            size_hint: .2,.05
+            text: root.date
+            size_hint: .166,.05
+            pos_hint: {'x':.01, 'y':.33}
+
+
+<PDFQC>
+    size_hint_y: .3
+    orientation: 'vertical'
+    FloatLayout:
+        size_hint: 1, .3
+        Button:
+            text: 'Complete'
+            size_hint: .166, .8
+            pos_hint: {'x':.01, 'y':0}
+            on_release: root.complete()
+        Button:
+            text: 'Missing'
+            size_hint: .166, .8
+            pos_hint: {'x':.648, 'y':0}
+        Button:
+            text: 'Voided'
+            size_hint: .166, .8
+            pos_hint: {'x':.824, 'y':0}
+    FloatLayout:
+        Label:
+            text: root.user
+            size_hint: .166,.05
+            pos_hint: {'x':.01, 'y':.66}
+        Label:
+            text: root.date
+            size_hint: .166,.05
+            pos_hint: {'x':.01, 'y':.33}
+
+<GISQC>
+    id: base
+    size_hint_y: .3
+    orientation: 'vertical'
+    FloatLayout:
+        size_hint: 1, .3
+        Button:
+            text: 'Complete'
+            size_hint: .166, .8
+            pos_hint: {'x':.01, 'y':0}
+            on_release: root.complete()
+        Button:
+            text: 'Missing'
+            size_hint: .166, .8
+            pos_hint: {'x':.648, 'y':0}
+        Button:
+            text: 'Voided'
+            size_hint: .166, .8
+            pos_hint: {'x':.824, 'y':0}
+    FloatLayout:
+        Label:
+            text: root.user
+            size_hint: .166,.05
+            pos_hint: {'x':.01, 'y':.66}
+        Label:
+            text: root.date
+            size_hint: .166,.05
+            pos_hint: {'x':.01, 'y':.33}
+        GridLayout:
+            cols: 2
+            size_hint_x: .66
+            pos_hint: {'x':.33, 'y':0}
+            BoxLayout:
+                CheckBox:
+                    size_hint_x: .3
+                    active: True if root.feature_size == 1 else False
+                    on_release: root.update('GISSizeINC')
+                Label:
+                    text: "Size Incorrect"
+            BoxLayout:
+                CheckBox:
+                    size_hint_x: .3
+                    active: True if root.shape == 1 else False
+                    on_release: root.update('GISShapeINC')
+                Label:
+                    text: "Shape Incorrect"
+            BoxLayout:
+                CheckBox:
+                    size_hint_x: .3
+                    active: True if root.location == 1 else False
+                    on_release: root.update('GISLocINC')
+                Label:
+                    text: "Location Incorrect"
+            BoxLayout:
+                CheckBox:
+                    size_hint_x: .3
+                    active: True if root.duplicate == 1 else False
+                    on_release: root.update('GISDupe')
+                Label:
+                    text: "Duplicate Locations"
+            BoxLayout:
+                CheckBox:
+                    size_hint_x: .3
+                    active: True if root.other == 1 else False
+                    on_release: root.update('GISOther')
+                Label:
+                    text: "Other (Specify)"
+            TextInput:
+                hint_text: 'Comments/Notes'
+                text: root.note
+                multiline: False
+                on_text: root.update_note(self.text)

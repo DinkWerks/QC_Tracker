@@ -1,0 +1,7 @@
+import os
+import platform
+
+sys = platform.system()
+folder = os.getcwd()
+shortdir = folder[:-7:]
+longdir = shortdir + 'db/'
