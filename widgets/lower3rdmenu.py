@@ -3,10 +3,20 @@ from kivy.app import Builder
 from kivy.properties import NumericProperty, StringProperty
 from scripts.dbinterface import update_gis, update_gis_text, read
 
-Builder.load_file('scripts/menu.kv')
 
+Builder.load_file('widgets/menu.kv')
 
-class DBQC(BoxLayout):
+class Lower3rdMenu(BoxLayout):
+    def __init__(self, **kwargs):
+        super(Lower3rdMenu, self).__init__(**kwargs)
+
+    def complete(self):
+        self.parent.write(self.entry, self.menu_type)
+
+    def update_data(self):
+       self.parent.data = read()
+
+class DBQC(Lower3rdMenu):
     user = StringProperty('')
     date = StringProperty('')
 
@@ -15,12 +25,10 @@ class DBQC(BoxLayout):
         self.user = user
         self.date = date
         self.entry = entry
-
-    def complete(self):
-        self.parent.write(self.entry, 'DB')
+        self.menu_type = 'DB'
 
 
-class PDFQC(BoxLayout):
+class PDFQC(Lower3rdMenu):
     user = StringProperty('')
     date = StringProperty('')
 
@@ -29,12 +37,10 @@ class PDFQC(BoxLayout):
         self.user = user
         self.date = date
         self.entry = entry
-
-    def complete(self):
-        self.parent.write(self.entry, 'PDF')
+        self.menu_type = 'PDF'
 
 
-class GISQC(BoxLayout):
+class GISQC(Lower3rdMenu):
     user = StringProperty('')
     date = StringProperty('')
     feature_size = NumericProperty(0)
@@ -56,6 +62,8 @@ class GISQC(BoxLayout):
         self.other = other
         self.note = note
         self.entry = entry
+        self.menu_type = 'GIS'
+
 
     def update(self, source):
         variable_dicts = {'GISSizeINC': self.feature_size, 'GISShapeINC': self.shape, 'GISLocINC': self.location,
@@ -68,15 +76,8 @@ class GISQC(BoxLayout):
             variable_dicts[source] = 1
             value = 1
         update_gis(source, value, self.entry)
-        self.parent.data = read()
+        self.update_data()
 
     def update_note(self, text):
-        #  This line throws errors at when creating the menu class.
-        #  It is being called when the grid is being placed into the layout, and before self.parent has been established.
-        #  I need to either move updating to a separate class, or learn to postpone the call to re-read until after the textbox is placed.
-        #  This happens here, and not during the checkboxes, because they are drawn after the grid layout is added.
-        print self.parent
         update_gis_text(text, self.entry)
 
-    def complete(self):
-        self.parent.write(self.entry, 'GIS')

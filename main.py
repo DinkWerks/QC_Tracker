@@ -1,31 +1,13 @@
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import ObjectProperty, StringProperty
-
 from datetime import date
 
-from scripts.menu import PDFQC, GISQC, DBQC
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+
 from scripts.dbinterface import read, read_users, complete
 from scripts.user import User
 
-class Resource(BoxLayout):
-    primary = StringProperty('')
-    trinomial = StringProperty('')
-    rc = ObjectProperty('')
-    dc = ObjectProperty('')
-    gc = ObjectProperty('')
-
-    def __init__(self, primary, trinomial, rc, dc, gc, entry, **kwargs):
-        super(Resource, self).__init__(**kwargs)
-        self.primary = primary
-        self.trinomial = trinomial
-        self.rc = rc
-        self.dc = dc
-        self.gc = gc
-        self.entry = entry
-
-    def callmenu(self, source):
-        self.parent.parent.parent.parent.add_menu(source, self.entry)
+from widgets.lower3rdmenu import PDFQC, GISQC, DBQC
+from widgets.recordwidget import Resource
 
 
 class ResourcesScreen(BoxLayout):
@@ -48,7 +30,6 @@ class ResourcesScreen(BoxLayout):
     def write(self, ent, src):
         d = date.today()
         complete(src, User.user_id, d, self.data[ent-1][0])
-        self.data = read()
         self.load()
         self.add_menu(2, ent-1)
 
@@ -56,6 +37,7 @@ class ResourcesScreen(BoxLayout):
         pass
 
     def add_menu(self, menu_type, entry):
+        self.data = read()
         d = self.data[entry]
         if self.menu_open == 1:
             self.remove_widget(self.menu)
@@ -67,7 +49,6 @@ class ResourcesScreen(BoxLayout):
             self.menu = GISQC(self.user_data[d[11]][2], d[12], d[15], d[16], d[17], d[18], d[19], d[20], d[0])
         self.menu_open = 1
         self.add_widget(self.menu)
-
 
 
 class Main(App):

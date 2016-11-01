@@ -31,7 +31,7 @@ def read_users():
 
 def complete(field, user, date, record):
     print field, user, date, record
-    cursor.execute('UPDATE resources SET %s Check = 1, %sUsrID = ?, %sDate = ? WHERE ID = ?'
+    cursor.execute('UPDATE resources SET %sCheck = 1, %sUsrID = ?, %sDate = ? WHERE ID = ?'
                    % (field , field, field),
                    (user, date, record))
     conn.commit()
@@ -43,7 +43,5 @@ def update_gis(field, value, record):
 
 
 def update_gis_text(value, record):
-    print 'Record: ' + str(record)
-    print 'Text: ' + value
     cursor.execute('UPDATE resources SET Note = ? WHERE ID = ?', (value, record))
     conn.commit()
